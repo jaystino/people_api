@@ -4,13 +4,13 @@ from uuid import UUID
 from pydantic import BaseModel, EmailStr
 
 
-class PersonReadIn(BaseModel):
-    id_: UUID
+# class PersonIn(BaseModel):
+#     person_id: UUID
 
 
 class PersonOut(BaseModel):
     record: int
-    id_: UUID
+    person_id: UUID
     first_name: str
     middle_name: Optional[str] = None
     last_name: str
@@ -29,16 +29,12 @@ class PersonCreateIn(BaseModel):
 
 
 class PersonUpdateIn(BaseModel):
-    id_: UUID
+    person_id: UUID
     first_name: Optional[str] = None
     middle_name: Optional[str] = None
     last_name: Optional[str] = None
     email: Optional[EmailStr] = None
     age: Optional[int] = None
-
-
-class PersonDeleteIn(BaseModel):
-    id_: UUID
 
 
 class PersonDeleteOut(BaseModel):

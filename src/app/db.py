@@ -25,7 +25,7 @@ persons = Table(
     "persons",
     metadata,
     Column("record", Integer, primary_key=True),
-    Column("id", UUID(as_uuid=True), nullable=False),
+    Column("person_id", UUID(as_uuid=True), nullable=False),
     Column("first_name", String(50), nullable=False),
     Column("middle_name", String(50)),
     Column("last_name", String(50), nullable=False),
@@ -34,7 +34,7 @@ persons = Table(
     Column("version", Integer, default=1, nullable=False),
     Column("is_latest", Boolean, default=True, nullable=False),
     Column("created_date", DateTime, default=func.now(), nullable=False),
-    UniqueConstraint("id", "version", name="id_version_uc"),
+    UniqueConstraint("person_id", "version", name="id_version_uc"),
 )
 
 # databases query builder
