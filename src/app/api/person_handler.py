@@ -3,10 +3,11 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from app.api.dal import insert_person
 from app.api.models import (
+    Person,
     PersonCreateIn,
     PersonDeleteOut,
-    PersonOut,
     PersonsOut,
     PersonUpdateIn,
 )
@@ -14,22 +15,22 @@ from app.api.models import (
 router = APIRouter()
 
 
-@router.get("/person/{person_id}", response_model=PersonOut)
+@router.get("/{person_id}", response_model=Person)
 async def read_person(person_id: UUID, version: Optional[int] = None):
-    return PersonOut
+    return Person
 
 
-@router.post("/person/", response_model=PersonOut)
+@router.post("/", response_model=Person, status_code=201)
 async def create_person(person: PersonCreateIn):
-    return PersonOut
+    await insert_person(person)
 
 
-@router.put("/person/", response_model=PersonOut)
+@router.put("/", response_model=Person)
 async def update_person(person: PersonUpdateIn):
-    return PersonOut
+    return Person
 
 
-@router.delete("/person/{person_id}", response_model=PersonDeleteOut)
+@router.delete("/{person_id}", response_model=PersonDeleteOut)
 async def delete_person(person_id: UUID):
     return PersonDeleteOut
 
