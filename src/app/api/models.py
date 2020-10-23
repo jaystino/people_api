@@ -4,28 +4,19 @@ from uuid import UUID
 from pydantic import BaseModel, EmailStr
 
 
-# class PersonIn(BaseModel):
-#     person_id: UUID
-
-
-class PersonOut(BaseModel):
-    record: int
-    person_id: UUID
-    first_name: str
-    middle_name: Optional[str] = None
-    last_name: str
-    email: EmailStr
-    age: int
-    version: int
-    is_latest: bool
-
-
 class PersonCreateIn(BaseModel):
     first_name: str
     middle_name: Optional[str] = None
     last_name: str
     email: EmailStr
     age: int
+
+
+class Person(PersonCreateIn):
+    record: int
+    person_id: UUID
+    version: int
+    is_latest: bool
 
 
 class PersonUpdateIn(BaseModel):
@@ -41,5 +32,14 @@ class PersonDeleteOut(BaseModel):
     success: bool
 
 
+class Persons(BaseModel):
+    record: int
+    person_id: str
+    first_name: str
+    last_name: str
+    version: int
+    is_latest: bool
+
+
 class PersonsOut(BaseModel):
-    persons: List[PersonOut]
+    persons: List[Persons]
