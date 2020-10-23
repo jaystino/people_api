@@ -32,25 +32,15 @@ async def select_person(person_id: UUID, version: Optional[int] = None):
         )
     if record := await database.fetch_one(query=query):
         return dict(record)
-    return None
 
 
 async def select_persons():
     query = persons.select()
     if records := await database.fetch_all(query=query):
-        targets = [
-            "record",
-            "person_id",
-            "first_name",
-            "last_name",
-            "version",
-            "is_latest",
-        ]
         recs = [
             {
                 k: (lambda x: str(x) if isinstance(x, UUID) else x)(v)
                 for k, v in rec.items()
-                if k in targets
             }
             for rec in records
         ]
