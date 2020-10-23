@@ -42,7 +42,9 @@ async def select_person(
     :return: a single person record
     """
     if not version:
-        query = persons.select().where(person_id == persons.c.person_id)
+        query = persons.select().where(
+            and_(persons.c.person_id == person_id, persons.c.is_latest == True)
+        )
     else:
         query = persons.select().where(
             and_(person_id == persons.c.person_id, version == persons.c.version)
