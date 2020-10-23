@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from app.api import person
+from app.api import person_handler, persons_handler
 from app.db import engine, metadata, database
 
 metadata.create_all(engine)
@@ -18,4 +18,5 @@ async def shutdown():
     await database.disconnect()
 
 
-app.include_router(person.router)
+app.include_router(persons_handler.router, prefix="/persons", tags=["persons"])
+app.include_router(person_handler.router, prefix="/person", tags=["person"])

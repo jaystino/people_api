@@ -3,14 +3,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
-from app.api.dal import insert_person
-from app.api.models import (
-    Person,
-    PersonCreateIn,
-    PersonDeleteOut,
-    PersonsOut,
-    PersonUpdateIn,
-)
+from app.api.dal import insert_person, select_person
+from app.api.models import Person, PersonCreateIn, PersonDeleteOut, PersonUpdateIn
 
 router = APIRouter()
 
@@ -33,8 +27,3 @@ async def update_person(person: PersonUpdateIn):
 @router.delete("/{person_id}", response_model=PersonDeleteOut)
 async def delete_person(person_id: UUID):
     return PersonDeleteOut
-
-
-@router.get("/persons/", response_model=PersonsOut)
-async def read_person():
-    return PersonsOut
