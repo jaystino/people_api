@@ -12,6 +12,13 @@ router = APIRouter()
 
 @router.get("/{person_id}", response_model=Person)
 async def read_person(person_id: UUID, version: Optional[int] = None):
+    """GET a single person record. By default returns the most current version, unless
+    the version is specified.
+
+    :param person_id: person uuid
+    :param version: target person version
+    :return: a person record
+    """
     try:
         record = await select_person(person_id, version)
     except Exception as e:  # TODO: remove bare exception
@@ -27,6 +34,11 @@ async def read_person(person_id: UUID, version: Optional[int] = None):
 
 @router.post("/", response_model=Person, status_code=201)
 async def create_person(person_in: PersonCreateIn):
+    """POST a new person with a unique id.
+
+    :param person_in: PersonCreateIn object
+    :return: Person instance if success, else 400
+    """
     person_id = uuid4()
     version = 1
     is_latest = True

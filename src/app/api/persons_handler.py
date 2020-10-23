@@ -8,6 +8,10 @@ router = APIRouter()
 
 @router.get("/", response_model=PersonsOut)
 async def read_persons():
+    """GET latest versions of all unique persons.
+
+    :return: dict containing a list of person records
+    """
     try:
         record = await select_persons()
     except Exception as e:  # TODO: remove bare exception

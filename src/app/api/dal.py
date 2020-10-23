@@ -1,5 +1,5 @@
-from typing import Optional
-from uuid import UUID, uuid4
+from typing import Dict, List, Optional, Union
+from uuid import UUID
 
 from sqlalchemy.sql import and_
 
@@ -9,7 +9,15 @@ from app.db import database, persons
 
 async def insert_person(
     person: PersonCreateIn, person_id: UUID, version: int, is_latest: bool
-):
+) -> int:
+    """Insert a new person record with a unique person_id into the persons table.
+
+    :param person: PersonCreateIn object
+    :param person_id: uuid of person
+    :param version: version of record for given person_id
+    :param is_latest: bool indicating this the latest version the given person_id
+    :return: record id
+    """
     query = persons.insert().values(
         person_id=person_id,
         first_name=person.first_name,
@@ -23,7 +31,16 @@ async def insert_person(
     return await database.execute(query=query)
 
 
-async def select_person(person_id: UUID, version: Optional[int] = None):
+async def select_person(
+    person_id: UUID, version: Optional[int] = None
+) -> Union[Dict, None]:
+    """Fetch a single person record for the given person_id. Defaults to the latest
+    version unless provided.
+
+    :param person_id: uuid of person
+    :param version: target record version
+    :return: a single person record
+    """
     if not version:
         query = persons.select().where(person_id == persons.c.person_id)
     else:
@@ -34,7 +51,11 @@ async def select_person(person_id: UUID, version: Optional[int] = None):
         return dict(record)
 
 
-async def select_persons():
+async def select_persons() -> Union[List[Dict], None]:
+    """Fetch the latest versions of all person records.
+
+    :return: list of person records
+    """
     query = persons.select()
     if records := await database.fetch_all(query=query):
         recs = [
