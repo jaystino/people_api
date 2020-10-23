@@ -3,8 +3,15 @@
 ### Overview
 
 This simple API was built with Python3.8, the 
-[FastAPI framework](https://fastapi.tiangolo.com/), and PostgreSQL all,
-running stress-free in Docker.  
+[FastAPI framework](https://fastapi.tiangolo.com/), and PostgreSQL, all
+running stress-free in Docker.
+
+Why FastAPI? I've heard a lot of talk about this framework and have been
+eager to test drive it for a while. It did not disappoint. It has the
+best async support of any python library I've ever used--absolutely no
+need to think about event loops. The required data validation provides
+really smooth error handling and enables very nice auto-generated
+documentation. Recommend. 10/10. Would use again.
 ___
 
 ### Run
