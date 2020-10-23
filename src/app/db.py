@@ -25,7 +25,7 @@ persons = Table(
     "persons",
     metadata,
     Column("record", Integer, primary_key=True),
-    Column("person_id", UUID(as_uuid=True), nullable=False),
+    Column("person_id", UUID(as_uuid=False), nullable=False),
     Column("first_name", String(50), nullable=False),
     Column("middle_name", String(50)),
     Column("last_name", String(50), nullable=False),
