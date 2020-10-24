@@ -1,4 +1,6 @@
 asynctest==0.13.0
 pytest==6.1.1
+pytest-cov==2.10.1
+tox==3.20.1
 
 -r requirements.txt
