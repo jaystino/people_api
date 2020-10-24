@@ -16,8 +16,8 @@ ___
 
 ### Run
 
-These instructions assume the host is running MacOS or Linux and Docker 
-is installed.
+These instructions assume the host is running MacOS or Linux and 
+[Docker](https://www.docker.com/) is installed.
 
 To run,
 * Clone repo
@@ -61,9 +61,21 @@ contains sample request and response objects, as well as the ability to
 interactively test the API.
 ___
 
+### Considerations
+* __DB Transactions__. Currently no DB queries are transactional. The
+downside to this is obvious. In addition to increasing data integrity,
+using transactional queries would reduce the volume of conditionals in
+the handler code.
+* __Relational vs Non-Relational__.
+* __Delete returns success even if no target record was found__. There
+are varying opinions on this behavior. From a security standpoint it
+could be considered a feature, but from a usability standpoint it could
+be viewed as a bug.
+___
+
 ### Future Features
 
-* Cache. Caching the latest version of each person with some TTL will  
+* Cache. Caching the latest version of each person with some TTL will
 reduce the need for the most common DB query.
 * Testing. This needs integration tests. And more unit tests.
 * Logging
