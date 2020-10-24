@@ -65,17 +65,18 @@ async def update_person(person: PersonUpdateIn):
             f"{person.person_id} found"
         )
         raise HTTPException(status_code=404, detail=message)
+
     # ensure request contains updates compared to current_person
     updates = {k: v for k, v in dict(person).items() if v and v != current_person[k]}
     if not updates:
         raise HTTPException(status_code=400, detail="no new attributes to update")
 
     # set current version is_latest to False
-    # if not await update_latest(False, record=current_person.get("record")):
-    #     raise HTTPException(
-    #         status_code=500, detail="failed to deactivate previous version"
-    #     )
-    if not await update_latest(person_id=person.person_id):
+    if not await update_is_latest(
+        person_id=person.person_id,
+        version=current_person.get("version"),
+        set_latest=False,
+    ):
         raise HTTPException(
             status_code=500, detail="failed to deactivate previous version"
         )
@@ -138,7 +139,7 @@ def _format_person_response(
     :param person_id: person UUID
     :param version: version for associated person_id
     :param is_latest: bool indicating if specified version is the most current
-    :return:
+    :return: person record dict
     """
     return dict(
         record=record,
