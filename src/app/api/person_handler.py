@@ -1,10 +1,16 @@
 from asyncpg.exceptions import DataError
-from typing import Optional
+from typing import Dict, Optional
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, HTTPException
 
-from app.api.dal import insert_person, select_person
+from app.api.dal import (
+    drop_person,
+    insert_person,
+    select_latest_version,
+    select_person,
+    update_is_latest,
+)
 from app.api.models import Person, PersonCreateIn, PersonDeleteOut, PersonUpdateIn
 
 router = APIRouter()
@@ -94,7 +100,28 @@ async def update_person(person: PersonUpdateIn):
 
 @router.delete("/{person_id}", response_model=PersonDeleteOut)
 async def delete_person(person_id: UUID):
-    return PersonDeleteOut
+    """DELETE the latest version corresponding to the given person_id.
+
+    :param person_id: person UUID
+    :return: dict stating success, else HTTPException
+    """
+    # fetch and delete latest record
+    if latest_version := await select_latest_version(person_id):
+        await drop_person(person_id, latest_version)
+        if latest_version == 1:
+            return {"success": True}  # 1 is the lowest possible version
+    else:
+        message = f"cannot delete record, no records with person_id {person_id} found"
+        raise HTTPException(status_code=404, detail=message)
+
+    # set previous version is_latest to True
+    if not await update_is_latest(
+        person_id=person_id, version=(latest_version - 1), set_latest=True
+    ):
+        # TODO: make this transactional. Will corrupt data if failure at this point.
+        raise HTTPException(status_code=500, detail="versioning error")
+
+    return {"success": True}
 
 
 def _format_person_response(
