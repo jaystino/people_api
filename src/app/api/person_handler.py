@@ -104,13 +104,13 @@ def _format_person_response(
     version: int,
     is_latest: bool,
 ) -> Dict:
-    """
+    """Format the person response object.
 
-    :param person_in:
-    :param record:
-    :param person_id:
-    :param version:
-    :param is_latest:
+    :param person_in: PersonCreateIn object
+    :param record: record number
+    :param person_id: person UUID
+    :param version: version for associated person_id
+    :param is_latest: bool indicating if specified version is the most current
     :return:
     """
     return dict(
