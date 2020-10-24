@@ -1,9 +1,9 @@
 from typing import Dict, List, Optional, Union
 from uuid import UUID
 
-from sqlalchemy.sql import and_
+from sqlalchemy.sql import and_, func, select as gen_select
 
-from app.api.models import PersonCreateIn
+from app.api.models import Person, PersonCreateIn
 from app.db import database, persons
 
 
@@ -53,6 +53,46 @@ async def select_person(
         return dict(record)
 
 
+async def update_is_latest(person_id: UUID, version: int, set_latest: bool) -> Person:
+    """Update the is_latest bool column for a single person record.
+
+    :param person_id: person UUID
+    :param version: target version
+    :param set_latest: target is_latest status
+    :return: Person object
+    """
+    query = (
+        persons.update()
+        .where(and_(persons.c.person_id == person_id, persons.c.version == version))
+        .values(is_latest=set_latest)
+        .returning(
+            persons.c.record,
+            persons.c.person_id,
+            persons.c.first_name,
+            persons.c.middle_name,
+            persons.c.last_name,
+            persons.c.email,
+            persons.c.age,
+            persons.c.version,
+            persons.c.is_latest,
+        )
+    )
+    return await database.execute(query=query)
+
+
+async def drop_person(person_id: UUID, version: int):
+    """Delete a single person record from the persons table.
+
+    :param person_id: person UUID
+    :param version: record version
+    :return:
+    """
+    query = persons.delete().where(
+        and_(persons.c.person_id == person_id, persons.c.version == version)
+    )
+    await database.execute(query=query)
+
+
 async def select_persons() -> Union[List[Dict], None]:
     """Fetch the latest versions of all person records.
 
@@ -68,3 +108,16 @@ async def select_persons() -> Union[List[Dict], None]:
             for rec in records
         ]
         return recs
+
+
+async def select_latest_version(person_id: UUID) -> int:
+    """Selects the latest version for the given person_id.
+
+    :param person_id: person UUID
+    :return: version for given person_id
+    """
+    query = gen_select([func.max(persons.c.version)]).where(
+        persons.c.person_id == person_id
+    )
+    record = await database.fetch_one(query=query)
+    return record.get("max_1")
