@@ -47,7 +47,7 @@ async def select_person(
         )
     else:
         query = persons.select().where(
-            and_(person_id == persons.c.person_id, version == persons.c.version)
+            and_(persons.c.person_id == person_id, persons.c.version == version)
         )
     if record := await database.fetch_one(query=query):
         return dict(record)
