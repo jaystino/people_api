@@ -1,0 +1,4 @@
+asynctest==0.13.0
+pytest==6.1.1
+
+-r requirements.txt
