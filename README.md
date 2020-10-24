@@ -57,6 +57,9 @@ hard-coded where needed (and checked into version control). This is
 deliberate, as this is only a POC. If this were going to be used in
 production, credentials never would have been checked into version
 control.
+
+__Be sure to remove the hardcoded DB credentials and use a secure
+password prior to public use.__
 ___
 
 #### API Documentation
