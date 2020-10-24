@@ -19,8 +19,8 @@ ___
 These instructions assume the host is running MacOS or Linux and 
 [Docker](https://www.docker.com/) is installed.
 
-To run,
-* Clone repo
+__To run__,
+* clone repo
 * cd into project root, then...
 
 ```bash
@@ -30,7 +30,7 @@ $ docker-compose up -d --build
 Test the service is running by navigating to 
 [http://localhost:8002/docs](http://localhost:8002/docs).
 
-To run the unit tests...
+To run the __unit tests__...
 
 ```bash
 $ tox --
@@ -52,7 +52,7 @@ When the service is running, __detailed Swagger/OpenAPI documentation
 can be found at the `/docs` endpoint__. Please 
 [check it out here](http://localhost:8002/docs).
 
-Overview of Available REST Endpoints:
+__Overview of Available REST Endpoints:__
 
 | ENDPOINT | ACTION | REQ. PARAM | OPTIONAL PARAMS | BODY REQUIRED |
 |---       |---     |---         | ---             | ---           |
@@ -62,7 +62,7 @@ Overview of Available REST Endpoints:
 | /person/ | DELETE | person_id  | None            | No            |
 | /persons/| GET    | None       | None            | No            |
 
-Sample curls
+__Sample curls__
 
 POST /person/
 ```bash
@@ -108,10 +108,10 @@ ___
 
 ### Future Features
 
-* Cache. Caching the latest version of each person with some TTL will
-reduce the need for the most common DB query.
-* Testing. This needs integration tests. And more unit tests.
-* Logging
+* __Cache__. Caching the latest version of each person with some TTL
+will reduce the need for the most common DB query.
+* __Testing__. This needs integration tests. And more unit tests!!
+* __Logging__
 ___
 
 ### Code Convention and Style
