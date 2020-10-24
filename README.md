@@ -29,6 +29,12 @@ $ docker-compose up -d --build
 
 Test the service is running by navigating to 
 [http://localhost:8002/docs](http://localhost:8002/docs).
+
+To run the unit tests...
+
+```bash
+$ tox --
+```
 ___
 
 #### Authentication and Credentials
@@ -56,6 +62,33 @@ Overview of Available REST Endpoints:
 | /person/ | DELETE | person_id  | None            | No            |
 | /persons/| GET    | None       | None            | No            |
 
+Sample curls
+
+POST /person/
+```bash
+$ curl -X POST "http://localhost:8002/person/" -H  "accept: application/json" -H  "Content-Type: application/json" -d '{"first_name":"guido","last_name":"van rossum","email":"guidovr@python.com","age":64}' -i
+```
+
+GET /person/{person_id}
+```bash
+$ curl -X GET "http://localhost:8002/person/843651c0-4e05-4960-a274-95578912bfe1" -H "accept: application/json" -i
+```
+
+PUT /person/
+```bash
+$ curl -X PUT "http://localhost:8002/person/" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{'person_id':'843651c0-4e05-4960-a274-95578912bfe1','email':'guidovr@python3.com'}" -i
+```
+
+DELETE /person/{person_id}
+```bash
+curl -X DELETE "http://localhost:8002/person/843651c0-4e05-4960-a274-95578912bfe1" -H  "accept: application/json" -i
+```
+
+GET /persons/
+```bash
+$ curl -X GET "http://localhost:8002/persons/" -H "accept: application/json" -i
+```
+
 [The project's Swagger Documentation](http://localhost:8002/docs) 
 contains sample request and response objects, as well as the ability to
 interactively test the API.
@@ -66,7 +99,7 @@ ___
 downside to this is obvious. In addition to increasing data integrity,
 using transactional queries would reduce the volume of conditionals in
 the handler code.
-* __Relational vs Non-Relational__.
+* __Relational vs Non-Relational__. Lots of thoughts here.
 * __Delete returns success even if no target record was found__. There
 are varying opinions on this behavior. From a security standpoint it
 could be considered a feature, but from a usability standpoint it could
