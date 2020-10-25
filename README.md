@@ -2,29 +2,32 @@
 
 ### Overview
 
-This minimal REST API stores `person` records. Each unique person is
-identifiable by their associated `person_id` (UUID). Once a unique
-`person` is created, updates to the `person`'s attributes result in the
-creation of a new record with the same `person_id`, but with a new
-`version` attribute. Only the most current `version` of a `person` can
-be updated. When a `person` is updated, the API enforces that there are
-changes compared to the current `version`. It does not, however, verify
-that the new `version` is unique across all versions for the associated
-`person_id`. A `person` record can also be deleted, but only the most
-current `version`.
+This minimal REST API stores `person` records. Each `person` is uniquely
+identifiable by their associated `person_id` (UUID) and `version`. Once
+a unique `person` is created, updates to the `person`'s attributes
+result in the creation of a new record with the same `person_id`, but
+with a new `version` attribute. Only the most current `version` of a
+`person` can be updated. When a `person` is updated, the API enforces
+that there are changes compared to the current `version`. It does not,
+however, verify that the new `version` is unique across all versions for
+the associated `person_id`. The most current `version` of a `person` can
+be deleted.
 
 Bulk queries are not supported at this time.
 
-This project was built uses __Python3.8__, the
-[__FastAPI framework__](https://fastapi.tiangolo.com/), and
+This project was built using __Python3.8__, the
+[__FastAPI__](https://fastapi.tiangolo.com/) framework, and
 __PostgreSQL__, all running stress-free in __Docker__.
 
-__Why FastAPI?__ I've heard a lot of talk about this framework and have
-been eager to test drive it. It did not disappoint. It has the best
-async support of any python library I've ever used--absolutely no need
-to think about event loops. The required data validation provides really
-smooth error handling and enables very nice auto-generated
-documentation. Recommend. 10/10. Would use again.
+__Why FastAPI?__ There's been
+[a lot](https://talkpython.fm/episodes/show/284/modern-and-fast-apis-with-fastapi)
+[of talk](https://pythonbytes.fm/episodes/show/192/calculations-by-hand-but-in-the-compter-with-handcalcs)
+about this framework and I've been eager to test drive it. It did not
+disappoint. It has superior async support--there's absolutely no need
+to think about event loops. FastAPI uses mandatory data validation via
+[pydantic](https://pydantic-docs.helpmanual.io/), which provides smooth
+error handling and enables very nice auto-generated documentation.
+Recommend. 10/10. Would use again.
 ___
 
 ### Run
@@ -58,15 +61,16 @@ deliberate, as this is only a POC. If this were going to be used in
 production, credentials never would have been checked into version
 control.
 
-__Be sure to remove the hardcoded DB credentials and use a secure
-password prior to public use.__
+__Remove the hardcoded DB credentials and change the login and password
+prior to public use.__
 ___
 
 #### API Documentation
 
 When the service is running, __detailed Swagger/OpenAPI documentation
-can be found at the `/docs` endpoint__. Please
-[check it out here](http://localhost:8002/docs).
+can be found at the `/docs` endpoint__.
+[check it out here](http://localhost:8002/docs). Or the ReDoc version
+[here](http://localhost:8002/redoc).
 
 __Overview of Available REST Endpoints:__
 
@@ -78,7 +82,7 @@ __Overview of Available REST Endpoints:__
 | /person/ | DELETE | person_id  | None            | No            |
 | /persons/| GET    | None       | None            | No            |
 
-__Sample curls__
+__Sample curls:__
 
 POST /person/
 ```bash
@@ -117,15 +121,15 @@ TL;DR: changes to a FastAPI dependency broke standard regex in routes.
 ___
 
 ### Considerations
-* __DB Transactions__. Currently no DB queries are transactional. The
-downside to this is obvious. In addition to increasing data integrity,
-using transactional queries would reduce the volume of conditionals in
-the handler code.
+* __DB Transactions__. Currently no DB queries are transactional/atomic.
+The downside to this is obvious. In addition to increasing data
+integrity, using transactional, atomic queries would reduce the
+complexity of the handler code.
 * __Relational vs Non-Relational__. Lots of thoughts here.
 * __Delete returns success even if no target record was found__. There
 are varying opinions on this behavior. From a security standpoint it
-could be considered a feature, but from a usability standpoint it could
-be viewed as a bug.
+could be considered a feature, from a usability standpoint it could be
+viewed as a bug.
 ___
 
 ### Future Features
@@ -138,6 +142,7 @@ ___
 
 ### Code Convention and Style
 
-This project mostly conforms to PEP-8's style guide. Max line length is
+This project mostly conforms to the standards in
+[PEP-8](https://www.python.org/dev/peps/pep-0008/). Max line length is
 extended to 88 characters, which is
 [Black's](https://pypi.org/project/black/) default line-length.
